@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>انتخاب مراجع - دکتر رزرو</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+    body{font-family:Vazirmatn,sans-serif}
+</style>
+</head>
+<body class="bg-gray-50">
+
+<!-- هدر -->
+<header class="bg-white border-b sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center">
+        <div class="flex items-center gap-2 sm:gap-3">
+            <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center overflow-hidden">
+                <img src="./images/Logo (1).jpg" alt="لوگو" class="w-full h-full object-cover">
+            </div>
+            <h1 class="text-xl sm:text-2xl font-bold">
+                <span class="text-black">دکتر</span>
+                <span class="text-blue-400">رزرو</span>
+            </h1>
+        </div>
+        <nav class="hidden md:flex gap-6 lg:gap-8">
+            <a href="search.html" class="text-gray-600 hover:text-blue-600 transition text-sm lg:text-base">لیست پزشکان</a>
+            <a href="#" class="text-gray-600 hover:text-blue-600 transition text-sm lg:text-base">سوالات متداول</a>
+            <a href="about.html" class="text-gray-600 hover:text-blue-600 transition text-sm lg:text-base">درباره ما</a>
+            <a href="#" class="text-gray-600 hover:text-blue-600 transition text-sm lg:text-base">تماس با ما</a>
+        </nav>
+        <div class="flex items-center gap-2 sm:gap-3">
+            <div id="authSection" class="hidden md:flex items-center gap-3">
+                <div id="guestMode" class="flex items-center gap-2">
+                    <a href="login.html" class="text-blue-600 hover:text-blue-800 transition text-sm">ورود</a>
+                    <span class="text-gray-300">|</span>
+                    <a href="login.html" class="bg-blue-600 text-white px-3 py-1.5 rounded-xl text-sm font-medium hover:bg-blue-700 transition">ثبت نام</a>
+                </div>
+                <div id="userMode" class="hidden flex items-center gap-2">
+                    <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-sm">
+                        <span id="userInitial">ک</span>
+                    </div>
+                    <a href="profile.html" id="userNameDisplay" class="text-gray-700 font-medium text-sm max-w-[100px] truncate hover:text-blue-600 transition">کاربر</a>
+                    <button onclick="logout()" class="text-red-500 text-xs hover:text-red-700 transition">خروج</button>
+                </div>
+            </div>
+            <button id="menuBtn" class="md:hidden flex flex-col gap-1.5 p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg transition" onclick="toggleMenu()">
+                <span class="block w-5 sm:w-6 h-0.5 bg-gray-700 transition duration-300" id="line1"></span>
+                <span class="block w-5 sm:w-6 h-0.5 bg-gray-700 transition duration-300" id="line2"></span>
+                <span class="block w-5 sm:w-6 h-0.5 bg-gray-700 transition duration-300" id="line3"></span>
+            </button>
+        </div>
+    </div>
+    <div id="mobileMenu" class="md:hidden hidden bg-white border-t px-4 sm:px-6 py-4 shadow-lg">
+        <nav class="flex flex-col gap-3">
+            <a href="search.html" class="text-gray-700 hover:text-blue-600 transition py-2 border-b border-gray-100 text-sm">لیست پزشکان</a>
+            <a href="#" class="text-gray-700 hover:text-blue-600 transition py-2 border-b border-gray-100 text-sm">سوالات متداول</a>
+            <a href="about.html" class="text-gray-700 hover:text-blue-600 transition py-2 border-b border-gray-100 text-sm">درباره ما</a>
+            <a href="#" class="text-gray-700 hover:text-blue-600 transition py-2 border-b border-gray-100 text-sm">تماس با ما</a>
+            <div id="mobileAuthSection" class="pt-2">
+                <div id="mobileGuestMode" class="flex items-center gap-3">
+                    <a href="login.html" class="text-blue-600 font-medium text-sm">ورود</a>
+                    <span class="text-gray-300">|</span>
+                    <a href="login.html" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 transition">ثبت نام</a>
+                </div>
+                <div id="mobileUserMode" class="hidden flex items-center justify-between">
+                    <a href="profile.html" class="flex items-center gap-3 hover:text-blue-600 transition">
+                        <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-sm">
+                            <span id="mobileUserInitial">ک</span>
+                        </div>
+                        <span id="mobileUserNameDisplay" class="text-gray-700 font-medium text-sm">کاربر</span>
+                    </a>
+                    <button onclick="logout()" class="text-red-500 text-sm hover:text-red-700 transition">خروج</button>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<!-- بخش اصلی -->
+<section class="max-w-3xl mx-auto px-6 py-8">
+    <!-- مراحل رزرو -->
+    <div class="flex items-center justify-center gap-4 mb-8">
+        <div class="flex items-center gap-2">
+            <span class="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold">۱</span>
+            <span class="text-sm text-blue-600 font-medium">پزشک</span>
+        </div>
+        <div class="w-12 h-0.5 bg-blue-600"></div>
+        <div class="flex items-center gap-2">
+            <span class="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold">۲</span>
+            <span class="text-sm text-blue-600 font-medium">تاریخ و ساعت</span>
+        </div>
+        <div class="w-12 h-0.5 bg-blue-600"></div>
+        <div class="flex items-center gap-2">
+            <span class="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold">۳</span>
+            <span class="text-sm text-blue-600 font-medium">مراجع</span>
+        </div>
+        <div class="w-12 h-0.5 bg-gray-300"></div>
+        <div class="flex items-center gap-2">
+            <span class="w-8 h-8 bg-gray-300 text-gray-500 rounded-full flex items-center justify-center text-sm font-bold">۴</span>
+            <span class="text-sm text-gray-400">تایید</span>
+        </div>
+    </div>
+
+    <!-- اطلاعات پزشک -->
+    <div class="bg-white rounded-2xl border p-4 mb-6">
+        <div class="flex items-center gap-4">
+            <img id="doctorImage" src="" alt="دکتر" class="w-16 h-16 rounded-full object-cover border-2 border-blue-100">
+            <div class="flex-1">
+                <h3 id="doctorName" class="font-bold">دکتر</h3>
+                <p id="doctorSpecialty" class="text-gray-500 text-sm">تخصص</p>
+                <p id="doctorAddress" class="text-gray-400 text-xs">📍 آدرس</p>
+            </div>
+            <div class="text-left text-xs text-gray-500">
+                <div>📅 <span id="confirmDate"></span></div>
+                <div>⏰ <span id="confirmTime"></span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- انتخاب مراجع -->
+    <div class="bg-white rounded-2xl border p-6">
+        <h3 class="font-bold text-lg mb-2">مراجعه کننده</h3>
+        <p class="text-gray-500 text-sm mb-4">برای چه کسی نوبت میگیرید؟</p>
+
+        <div class="border rounded-xl p-4 mb-3 cursor-pointer hover:border-blue-400 transition" onclick="selectReferrer('self')">
+            <div class="flex items-center gap-3">
+                <input type="radio" name="referrer" value="self" class="w-4 h-4 text-blue-600" checked>
+                <div>
+                    <h4 id="selfName" class="font-bold text-sm">کاربر (خودم)</h4>
+                    <p id="selfPhone" class="text-gray-500 text-xs">۰۹۱۲۳۴۵۶۷۸۹</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="border rounded-xl p-4 cursor-pointer hover:border-blue-400 transition" onclick="selectReferrer('other')">
+            <div class="flex items-center gap-3">
+                <input type="radio" name="referrer" value="other" class="w-4 h-4 text-blue-600">
+                <div>
+                    <h4 class="font-bold text-sm">دریافت نوبت برای شخص دیگر</h4>
+                    <p class="text-gray-500 text-xs">اطلاعات بیمار را وارد کنید</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="otherPersonForm" class="hidden mt-4 pt-4 border-t">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">نام و نام خانوادگی</label>
+                    <input type="text" class="w-full border rounded-lg p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="نام بیمار">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">شماره تماس</label>
+                    <input type="text" class="w-full border rounded-lg p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="۰۹۱۲XXX">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">کد ملی</label>
+                    <input type="text" class="w-full border rounded-lg p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="۱۲۳۴۵۶۷۸۹۰">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">تاریخ تولد</label>
+                    <input type="text" class="w-full border rounded-lg p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="۱۳۷۰/۰۱/۰۱">
+                </div>
+            </div>
+        </div>
+
+        <button onclick="goToPayment()" class="w-full bg-blue-600 text-white py-3.5 rounded-xl font-bold hover:bg-blue-700 transition text-lg shadow-md hover:shadow-lg mt-4">
+            ادامه
+        </button>
+    </div>
+</section>
+
+<footer class="bg-white border-t pt-8 pb-4 mt-8">
+    <div class="max-w-7xl mx-auto px-6 text-center">
+        <p class="text-gray-400 text-sm">© ۱۴۰۴ تمام حقوق محفوظ است.</p>
+    </div>
+</footer>
+
+<!-- ============================================ -->
+<!-- همه اسکریپت‌ها در انتهای صفحه -->
+<!-- ============================================ -->
+
+<script>
+// ============================================
+// آدرس بک‌اند
+// ============================================
+const API_URL = 'http://localhost:3000/api';
+
+// ============================================
+// منو همبرگر
+// ============================================
+function toggleMenu() {
+    const menu = document.getElementById('mobileMenu');
+    const line1 = document.getElementById('line1');
+    const line2 = document.getElementById('line2');
+    const line3 = document.getElementById('line3');
+    menu.classList.toggle('hidden');
+    if (!menu.classList.contains('hidden')) {
+        line1.style.transform = 'rotate(45deg) translate(4px, 4px)';
+        line2.style.opacity = '0';
+        line3.style.transform = 'rotate(-45deg) translate(4px, -4px)';
+    } else {
+        line1.style.transform = 'rotate(0deg)';
+        line2.style.opacity = '1';
+        line3.style.transform = 'rotate(0deg)';
+    }
+}
+
+document.querySelectorAll('#mobileMenu a, #mobileMenu button').forEach(function(item) {
+    item.addEventListener('click', function() {
+        const menu = document.getElementById('mobileMenu');
+        const line1 = document.getElementById('line1');
+        const line2 = document.getElementById('line2');
+        const line3 = document.getElementById('line3');
+        if (!menu.classList.contains('hidden')) {
+            menu.classList.add('hidden');
+            line1.style.transform = 'rotate(0deg)';
+            line2.style.opacity = '1';
+            line3.style.transform = 'rotate(0deg)';
+        }
+    });
+});
+
+// ============================================
+// مدیریت نمایش کاربر
+// ============================================
+function updateUserDisplay() {
+    const userName = localStorage.getItem('userName');
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    const guestMode = document.getElementById('guestMode');
+    const userMode = document.getElementById('userMode');
+    const userNameDisplay = document.getElementById('userNameDisplay');
+    const userInitial = document.getElementById('userInitial');
+    const mobileGuestMode = document.getElementById('mobileGuestMode');
+    const mobileUserMode = document.getElementById('mobileUserMode');
+    const mobileUserNameDisplay = document.getElementById('mobileUserNameDisplay');
+    const mobileUserInitial = document.getElementById('mobileUserInitial');
+    
+    if (isLoggedIn && userName) {
+        if (guestMode) guestMode.classList.add('hidden');
+        if (userMode) userMode.classList.remove('hidden');
+        if (userNameDisplay) userNameDisplay.textContent = userName;
+        if (userInitial) userInitial.textContent = userName.charAt(0);
+        if (mobileGuestMode) mobileGuestMode.classList.add('hidden');
+        if (mobileUserMode) mobileUserMode.classList.remove('hidden');
+        if (mobileUserNameDisplay) mobileUserNameDisplay.textContent = userName;
+        if (mobileUserInitial) mobileUserInitial.textContent = userName.charAt(0);
+    } else {
+        if (guestMode) guestMode.classList.remove('hidden');
+        if (userMode) userMode.classList.add('hidden');
+        if (mobileGuestMode) mobileGuestMode.classList.remove('hidden');
+        if (mobileUserMode) mobileUserMode.classList.add('hidden');
+    }
+}
+
+function logout() {
+    if (confirm('آیا از خروج مطمئن هستید؟')) {
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('userName');
+        localStorage.removeItem('userPhone');
+        updateUserDisplay();
+        window.location.href = 'landingpage.html';
+    }
+}
+
+// ============================================
+// ✅ دریافت اطلاعات پزشک از بک‌اند (با دیباگ کامل)
+// ============================================
+// ============================================
+// ✅ دریافت اطلاعات پزشک از بک‌اند (با دیباگ کامل)
+// ============================================
+async function loadDoctor() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const doctorId = urlParams.get('doctor');
+    const date = urlParams.get('date') || '۲۴ دی ۱۴۰۴';
+    const time = urlParams.get('time') || '۱۱:۰۰';
+    
+    console.log('📌 Doctor ID from URL:', doctorId);
+    
+    if (!doctorId) {
+        alert('شناسه پزشک نامعتبر است');
+        return;
+    }
+    
+    try {
+        console.log('📡 Fetching doctor:', `${API_URL}/doctors/${doctorId}`);
+        const response = await fetch(`${API_URL}/doctors/${doctorId}`);
+        console.log('📌 Response status:', response.status);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        console.log('📌 Doctor data:', data);
+        
+        if (data.success && data.doctor) {
+            const doctor = data.doctor;
+            
+            // ✅ اصلاح مسیر تصویر
+            const imageName = doctor.image?.split('/').pop() || 'default-doctor.jpg';
+            document.getElementById('doctorImage').src = `images/${imageName}`;
+            document.getElementById('doctorImage').alt = doctor.name;
+            
+            document.getElementById('doctorName').textContent = doctor.name;
+            document.getElementById('doctorSpecialty').textContent = doctor.specialty || 'متخصص';
+            document.getElementById('doctorAddress').textContent = '📍 ' + (doctor.address || 'آدرس ثبت نشده');
+            document.getElementById('confirmDate').textContent = date;
+            document.getElementById('confirmTime').textContent = time;
+            console.log('✅ Doctor loaded:', doctor.name);
+        } else {
+            console.error('❌ No doctor in response');
+            alert('پزشک یافت نشد');
+        }
+    } catch (error) {
+        console.error('❌ خطا در دریافت اطلاعات پزشک:', error);
+        alert('خطا در دریافت اطلاعات پزشک. لطفاً دوباره تلاش کنید.');
+    }
+}
+// ============================================
+// دریافت اطلاعات کاربر از localStorage
+// ============================================
+const userName = localStorage.getItem('userName') || 'کاربر';
+const userPhone = localStorage.getItem('userPhone') || '۰۹۱۲۳۴۵۶۷۸۹';
+
+document.getElementById('selfName').textContent = userName + ' (خودم)';
+document.getElementById('selfPhone').textContent = userPhone;
+
+// ============================================
+// انتخاب مراجع
+// ============================================
+let selectedReferrer = 'self';
+
+function selectReferrer(type) {
+    selectedReferrer = type;
+    document.querySelectorAll('input[name="referrer"]').forEach(input => {
+        input.checked = input.value === type;
+    });
+    if (type === 'other') {
+        document.getElementById('otherPersonForm').classList.remove('hidden');
+    } else {
+        document.getElementById('otherPersonForm').classList.add('hidden');
+    }
+}
+
+// ============================================
+// رفتن به صفحه پرداخت
+// ============================================
+function goToPayment() {
+    if (selectedReferrer === 'other') {
+        const inputs = document.querySelectorAll('#otherPersonForm input');
+        let empty = false;
+        inputs.forEach(input => {
+            if (!input.value.trim()) {
+                input.style.borderColor = 'red';
+                empty = true;
+            } else {
+                input.style.borderColor = '';
+            }
+        });
+        if (empty) {
+            alert('لطفاً تمام اطلاعات بیمار را وارد کنید.');
+            return;
+        }
+    }
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    const doctorId = urlParams.get('doctor');
+    const date = urlParams.get('date');
+    const time = urlParams.get('time');
+    
+    window.location.href = `payment.html?doctor=${doctorId}&date=${encodeURIComponent(date)}&time=${time}&referrer=${selectedReferrer}`;
+}
+
+// ============================================
+// کلیک روی کارت‌ها
+// ============================================
+document.querySelectorAll('.border.rounded-xl.cursor-pointer').forEach(card => {
+    card.addEventListener('click', function() {
+        const radio = this.querySelector('input[type="radio"]');
+        if (radio) {
+            radio.checked = true;
+            selectReferrer(radio.value);
+        }
+    });
+});
+
+// ============================================
+// اجرا بعد از لود صفحه
+// ============================================
+document.addEventListener('DOMContentLoaded', function() {
+    loadDoctor();
+    updateUserDisplay();
+});
+</script>
+
+</body>
+</html>

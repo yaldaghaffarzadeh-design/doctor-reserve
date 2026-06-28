@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>پروفایل - دکتر رزرو</title>
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+    body{font-family:Vazirmatn,sans-serif}
+</style>
+</head>
+<body class="bg-gray-50">
+
+<!-- هدر -->
+<header class="bg-white border-b sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center">
+        <!-- لوگو -->
+        <div class="flex items-center gap-2 sm:gap-3">
+            <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center overflow-hidden">
+                <img src="./images/Logo (1).jpg" alt="لوگو" class="w-full h-full object-cover">
+            </div>
+            <h1 class="text-xl sm:text-2xl font-bold">
+                <span class="text-black">دکتر</span>
+                <span class="text-blue-400">رزرو</span>
+            </h1>
+        </div>
+        
+        <!-- منو دسکتاپ -->
+        <nav class="hidden md:flex gap-6 lg:gap-8">
+            <a href="search.html" class="text-gray-600 hover:text-blue-600 transition text-sm lg:text-base">لیست پزشکان</a>
+            <a href="#" class="text-gray-600 hover:text-blue-600 transition text-sm lg:text-base">سوالات متداول</a>
+            <a href="about.html" class="text-gray-600 hover:text-blue-600 transition text-sm lg:text-base">درباره ما</a>
+            <a href="#" class="text-gray-600 hover:text-blue-600 transition text-sm lg:text-base">تماس با ما</a>
+        </nav>
+        
+        <!-- بخش احراز هویت + دکمه همبرگر -->
+        <div class="flex items-center gap-2 sm:gap-3">
+            <!-- وضعیت کاربر (دسکتاپ) -->
+            <div id="authSection" class="hidden md:flex items-center gap-3">
+                <!-- حالت مهمان -->
+                <div id="guestMode" class="flex items-center gap-2">
+                    <a href="login.html" class="text-blue-600 hover:text-blue-800 transition text-sm">ورود</a>
+                    <span class="text-gray-300">|</span>
+                    <a href="login.html" class="bg-blue-600 text-white px-3 py-1.5 rounded-xl text-sm font-medium hover:bg-blue-700 transition">ثبت نام</a>
+                </div>
+                
+                <!-- حالت کاربر -->
+                <div id="userMode" class="hidden flex items-center gap-2">
+                    <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-sm">
+                        <span id="userInitial">ک</span>
+                    </div>
+                    <a href="profile.html" id="userNameDisplay" class="text-gray-700 font-medium text-sm max-w-[100px] truncate hover:text-blue-600 transition">
+                        کاربر
+                    </a>
+                    <button onclick="logout()" class="text-red-500 text-xs hover:text-red-700 transition">خروج</button>
+                </div>
+            </div>
+            
+            <!-- دکمه همبرگر (فقط موبایل) -->
+            <button id="menuBtn" class="md:hidden flex flex-col gap-1.5 p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg transition" onclick="toggleMenu()">
+                <span class="block w-5 sm:w-6 h-0.5 bg-gray-700 transition duration-300" id="line1"></span>
+                <span class="block w-5 sm:w-6 h-0.5 bg-gray-700 transition duration-300" id="line2"></span>
+                <span class="block w-5 sm:w-6 h-0.5 bg-gray-700 transition duration-300" id="line3"></span>
+            </button>
+        </div>
+    </div>
+    
+    <!-- ============================================ -->
+    <!-- منو موبایل (مخفی) -->
+    <!-- ============================================ -->
+    <div id="mobileMenu" class="md:hidden hidden bg-white border-t px-4 sm:px-6 py-4 shadow-lg">
+        <nav class="flex flex-col gap-3">
+            <a href="search.html" class="text-gray-700 hover:text-blue-600 transition py-2 border-b border-gray-100 text-sm">لیست پزشکان</a>
+            <a href="#" class="text-gray-700 hover:text-blue-600 transition py-2 border-b border-gray-100 text-sm">سوالات متداول</a>
+            <a href="about.html" class="text-gray-700 hover:text-blue-600 transition py-2 border-b border-gray-100 text-sm">درباره ما</a>
+            <a href="#" class="text-gray-700 hover:text-blue-600 transition py-2 border-b border-gray-100 text-sm">تماس با ما</a>
+            
+            <!-- بخش احراز هویت در موبایل -->
+            <div id="mobileAuthSection" class="pt-2">
+                <!-- حالت مهمان -->
+                <div id="mobileGuestMode" class="flex items-center gap-3">
+                    <a href="login.html" class="text-blue-600 font-medium text-sm">ورود</a>
+                    <span class="text-gray-300">|</span>
+                    <a href="login.html" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 transition">ثبت نام</a>
+                </div>
+                
+                <!-- حالت کاربر -->
+                <div id="mobileUserMode" class="hidden flex items-center justify-between">
+                    <a href="profile.html" class="flex items-center gap-3 hover:text-blue-600 transition">
+                        <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-sm">
+                            <span id="mobileUserInitial">ک</span>
+                        </div>
+                        <span id="mobileUserNameDisplay" class="text-gray-700 font-medium text-sm">کاربر</span>
+                    </a>
+                    <button onclick="logout()" class="text-red-500 text-sm hover:text-red-700 transition">خروج</button>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<!-- پروفایل -->
+<section class="max-w-3xl mx-auto px-6 py-12">
+    <div class="bg-white rounded-3xl border p-8 shadow-sm">
+        <div class="flex items-center gap-6 mb-8">
+            <div class="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center text-4xl text-blue-600">
+                👤
+            </div>
+            <div>
+                <h2 id="userName" class="text-2xl font-bold text-gray-800">کاربر</h2>
+                <p id="userPhone" class="text-gray-500">۰۹۱۲۳۴۵۶۷۸۹</p>
+                <span class="inline-block bg-green-100 text-green-600 text-xs px-3 py-1 rounded-full mt-1">✅ احراز هویت شده</span>
+            </div>
+        </div>
+
+        <!-- فرم تکمیل اطلاعات -->
+        <div class="border-t pt-6">
+            <h3 class="font-bold text-lg mb-4">اطلاعات شخصی</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">نام و نام خانوادگی</label>
+                    <input type="text" id="fullName" class="w-full border rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="نام خود را وارد کنید">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">شماره موبایل</label>
+                    <input type="text" id="phoneInput" class="w-full border rounded-xl p-3 bg-gray-50 text-gray-500" disabled>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">کد ملی</label>
+                    <input type="text" id="nationalCode" class="w-full border rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="۱۲۳۴۵۶۷۸۹۰">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">تاریخ تولد</label>
+                    <input type="text" id="birthDate" class="w-full border rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="۱۳۷۰/۰۱/۰۱">
+                </div>
+            </div>
+
+            <button onclick="saveProfile()" class="mt-6 bg-blue-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-blue-700 transition">
+                ذخیره اطلاعات
+            </button>
+        </div>
+
+        <!-- امکانات -->
+        <div class="border-t pt-6 mt-6">
+            <h3 class="font-bold text-lg mb-4">امکانات کاربری</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<a href="my-appointments.html" class="flex items-center gap-3 p-4 bg-blue-50 rounded-xl hover:bg-blue-100 transition">
+    <span class="text-2xl">📋</span>
+    <span class="font-bold text-sm">نوبت‌های من</span>
+</a>
+                </a>
+<a href="choose-doctor.html" class="flex items-center gap-3 p-4 bg-green-50 rounded-xl hover:bg-green-100 transition">
+    <span class="text-2xl">⭐</span>
+    <span class="font-bold text-sm">ثبت نظر</span>
+</a>
+                </a>
+                <a href="#" class="flex items-center gap-3 p-4 bg-purple-50 rounded-xl hover:bg-purple-100 transition">
+                    <span class="text-2xl">⚙️</span>
+                    <span class="font-bold text-sm">تنظیمات</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- فوتر -->
+<footer class="bg-white border-t pt-8 pb-4 mt-8">
+    <div class="max-w-7xl mx-auto px-6 text-center">
+        <p class="text-gray-400 text-sm">© ۱۴۰۴ تمام حقوق محفوظ است.</p>
+    </div>
+</footer>
+
+<script>
+// ============================================
+// نمایش اطلاعات
+// ============================================
+const phone = localStorage.getItem('userPhone') || '۰۹۱۲۳۴۵۶۷۸۹';
+document.getElementById('phoneInput').value = phone;
+document.getElementById('userPhone').textContent = phone;
+
+// ============================================
+// ذخیره پروفایل
+// ============================================
+function saveProfile() {
+    const name = document.getElementById('fullName').value.trim();
+    const nationalCode = document.getElementById('nationalCode').value.trim();
+    const birthDate = document.getElementById('birthDate').value.trim();
+    
+    if (!name) {
+        alert('لطفاً نام خود را وارد کنید.');
+        return;
+    }
+    
+    if (!nationalCode || nationalCode.length < 10) {
+        alert('لطفاً کد ملی را وارد کنید.');
+        return;
+    }
+    
+    localStorage.setItem('userName', name);
+    localStorage.setItem('userNationalCode', nationalCode);
+    localStorage.setItem('userBirthDate', birthDate);
+    
+    document.getElementById('userName').textContent = name;
+    alert('✅ اطلاعات شما با موفقیت ذخیره شد!');
+}
+
+// ============================================
+// خروج
+// ============================================
+function logout() {
+    if (confirm('آیا از خروج مطمئن هستید؟')) {
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('userPhone');
+        window.location.href = 'login.html';
+    }
+}
+
+// ============================================
+// نمایش نام ذخیره شده
+// ============================================
+const savedName = localStorage.getItem('userName');
+if (savedName) {
+    document.getElementById('userName').textContent = savedName;
+    document.getElementById('fullName').value = savedName;
+}
+
+const savedNational = localStorage.getItem('userNationalCode');
+if (savedNational) {
+    document.getElementById('nationalCode').value = savedNational;
+}
+
+const savedBirth = localStorage.getItem('userBirthDate');
+if (savedBirth) {
+    document.getElementById('birthDate').value = savedBirth;
+}
+</script>
+<script>
+// ============================================
+// منو همبرگر
+// ============================================
+function toggleMenu() {
+    const menu = document.getElementById('mobileMenu');
+    const line1 = document.getElementById('line1');
+    const line2 = document.getElementById('line2');
+    const line3 = document.getElementById('line3');
+    
+    menu.classList.toggle('hidden');
+    
+    if (!menu.classList.contains('hidden')) {
+        line1.style.transform = 'rotate(45deg) translate(4px, 4px)';
+        line2.style.opacity = '0';
+        line3.style.transform = 'rotate(-45deg) translate(4px, -4px)';
+    } else {
+        line1.style.transform = 'rotate(0deg)';
+        line2.style.opacity = '1';
+        line3.style.transform = 'rotate(0deg)';
+    }
+}
+
+// بستن منو با کلیک روی لینک‌ها
+document.querySelectorAll('#mobileMenu a, #mobileMenu button').forEach(function(item) {
+    item.addEventListener('click', function() {
+        const menu = document.getElementById('mobileMenu');
+        const line1 = document.getElementById('line1');
+        const line2 = document.getElementById('line2');
+        const line3 = document.getElementById('line3');
+        
+        if (!menu.classList.contains('hidden')) {
+            menu.classList.add('hidden');
+            line1.style.transform = 'rotate(0deg)';
+            line2.style.opacity = '1';
+            line3.style.transform = 'rotate(0deg)';
+        }
+    });
+});
+
+// ============================================
+// مدیریت نمایش کاربر در هدر
+// ============================================
+function updateUserDisplay() {
+    const userName = localStorage.getItem('userName');
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    
+    // دسکتاپ
+    const guestMode = document.getElementById('guestMode');
+    const userMode = document.getElementById('userMode');
+    const userNameDisplay = document.getElementById('userNameDisplay');
+    const userInitial = document.getElementById('userInitial');
+    
+    // موبایل
+    const mobileGuestMode = document.getElementById('mobileGuestMode');
+    const mobileUserMode = document.getElementById('mobileUserMode');
+    const mobileUserNameDisplay = document.getElementById('mobileUserNameDisplay');
+    const mobileUserInitial = document.getElementById('mobileUserInitial');
+    
+    if (isLoggedIn && userName) {
+        // دسکتاپ
+        guestMode.classList.add('hidden');
+        userMode.classList.remove('hidden');
+        userNameDisplay.textContent = userName;
+        userInitial.textContent = userName.charAt(0);
+        
+        // موبایل
+        mobileGuestMode.classList.add('hidden');
+        mobileUserMode.classList.remove('hidden');
+        mobileUserNameDisplay.textContent = userName;
+        mobileUserInitial.textContent = userName.charAt(0);
+    } else {
+        // دسکتاپ
+        guestMode.classList.remove('hidden');
+        userMode.classList.add('hidden');
+        
+        // موبایل
+        mobileGuestMode.classList.remove('hidden');
+        mobileUserMode.classList.add('hidden');
+    }
+}
+
+// ============================================
+// خروج از حساب کاربری
+// ============================================
+function logout() {
+    if (confirm('آیا از خروج مطمئن هستید؟')) {
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('userName');
+        localStorage.removeItem('userPhone');
+        updateUserDisplay();
+        window.location.href = 'landingpage.html';
+    }
+}
+
+// ============================================
+// اجرا بعد از لود صفحه
+// ============================================
+document.addEventListener('DOMContentLoaded', function() {
+    updateUserDisplay();
+});
+// ============================================
+// آدرس بک‌اند
+// ============================================
+const API_URL = 'http://localhost:3000/api';
+</script>
+
+</body>
+</html>

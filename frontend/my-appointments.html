@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لیست نوبت‌ها - دکتر رزرو</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+    body{font-family:Vazirmatn,sans-serif}
+</style>
+</head>
+<body class="bg-gray-50">
+
+<!-- هدر -->
+<header class="bg-white border-b sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center">
+        <div class="flex items-center gap-2 sm:gap-3">
+            <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center overflow-hidden">
+                <img src="./images/Logo (1).jpg" alt="لوگو" class="w-full h-full object-cover">
+            </div>
+            <h1 class="text-xl sm:text-2xl font-bold">
+                <span class="text-black">دکتر</span>
+                <span class="text-blue-400">رزرو</span>
+            </h1>
+        </div>
+        <nav class="hidden md:flex gap-6 lg:gap-8">
+            <a href="search.html" class="text-gray-600 hover:text-blue-600 transition text-sm lg:text-base">لیست پزشکان</a>
+            <a href="#" class="text-gray-600 hover:text-blue-600 transition text-sm lg:text-base">سوالات متداول</a>
+            <a href="about.html" class="text-gray-600 hover:text-blue-600 transition text-sm lg:text-base">درباره ما</a>
+            <a href="#" class="text-gray-600 hover:text-blue-600 transition text-sm lg:text-base">تماس با ما</a>
+        </nav>
+        <div class="flex items-center gap-2 sm:gap-3">
+            <div id="authSection" class="hidden md:flex items-center gap-3">
+                <div id="guestMode" class="flex items-center gap-2">
+                    <a href="login.html" class="text-blue-600 hover:text-blue-800 transition text-sm">ورود</a>
+                    <span class="text-gray-300">|</span>
+                    <a href="login.html" class="bg-blue-600 text-white px-3 py-1.5 rounded-xl text-sm font-medium hover:bg-blue-700 transition">ثبت نام</a>
+                </div>
+                <div id="userMode" class="hidden flex items-center gap-2">
+                    <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-sm">
+                        <span id="userInitial">ک</span>
+                    </div>
+                    <a href="profile.html" id="userNameDisplay" class="text-gray-700 font-medium text-sm max-w-[100px] truncate hover:text-blue-600 transition">کاربر</a>
+                    <button onclick="logout()" class="text-red-500 text-xs hover:text-red-700 transition">خروج</button>
+                </div>
+            </div>
+            <button id="menuBtn" class="md:hidden flex flex-col gap-1.5 p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg transition" onclick="toggleMenu()">
+                <span class="block w-5 sm:w-6 h-0.5 bg-gray-700 transition duration-300" id="line1"></span>
+                <span class="block w-5 sm:w-6 h-0.5 bg-gray-700 transition duration-300" id="line2"></span>
+                <span class="block w-5 sm:w-6 h-0.5 bg-gray-700 transition duration-300" id="line3"></span>
+            </button>
+        </div>
+    </div>
+    <div id="mobileMenu" class="md:hidden hidden bg-white border-t px-4 sm:px-6 py-4 shadow-lg">
+        <nav class="flex flex-col gap-3">
+            <a href="search.html" class="text-gray-700 hover:text-blue-600 transition py-2 border-b border-gray-100 text-sm">لیست پزشکان</a>
+            <a href="#" class="text-gray-700 hover:text-blue-600 transition py-2 border-b border-gray-100 text-sm">سوالات متداول</a>
+            <a href="about.html" class="text-gray-700 hover:text-blue-600 transition py-2 border-b border-gray-100 text-sm">درباره ما</a>
+            <a href="#" class="text-gray-700 hover:text-blue-600 transition py-2 border-b border-gray-100 text-sm">تماس با ما</a>
+            <div id="mobileAuthSection" class="pt-2">
+                <div id="mobileGuestMode" class="flex items-center gap-3">
+                    <a href="login.html" class="text-blue-600 font-medium text-sm">ورود</a>
+                    <span class="text-gray-300">|</span>
+                    <a href="login.html" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 transition">ثبت نام</a>
+                </div>
+                <div id="mobileUserMode" class="hidden flex items-center justify-between">
+                    <a href="profile.html" class="flex items-center gap-3 hover:text-blue-600 transition">
+                        <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-sm">
+                            <span id="mobileUserInitial">ک</span>
+                        </div>
+                        <span id="mobileUserNameDisplay" class="text-gray-700 font-medium text-sm">کاربر</span>
+                    </a>
+                    <button onclick="logout()" class="text-red-500 text-sm hover:text-red-700 transition">خروج</button>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<!-- بخش لیست نوبت‌ها -->
+<section class="max-w-4xl mx-auto px-6 py-12">
+    <div class="text-center mb-10">
+        <h2 class="text-3xl font-bold text-gray-800 mb-2">لیست نوبت‌ها</h2>
+        <p class="text-gray-500">نوبت‌های رزرو شده شما</p>
+        <div class="w-20 h-1 bg-blue-600 mx-auto rounded-full mt-3"></div>
+    </div>
+
+    <div id="appointmentsList" class="space-y-4"></div>
+    <div id="emptyMessage" class="hidden text-center py-12">
+        <div class="text-6xl mb-4">📋</div>
+        <h3 class="text-xl font-bold text-gray-700">نوبتی ثبت نشده است</h3>
+        <p class="text-gray-500 text-sm">برای رزرو نوبت به صفحه پزشکان بروید.</p>
+        <a href="search.html" class="inline-block mt-4 bg-blue-600 text-white px-6 py-2.5 rounded-xl font-medium hover:bg-blue-700 transition">
+            مشاهده پزشکان
+        </a>
+    </div>
+</section>
+
+<footer class="bg-white border-t pt-8 pb-4 mt-8">
+    <div class="max-w-7xl mx-auto px-6 text-center">
+        <p class="text-gray-400 text-sm">© ۱۴۰۴ تمام حقوق محفوظ است.</p>
+    </div>
+</footer>
+
+<!-- ============================================ -->
+<!-- همه اسکریپت‌ها در انتهای صفحه -->
+<!-- ============================================ -->
+
+<script>
+// ============================================
+// منو همبرگر
+// ============================================
+function toggleMenu() {
+    const menu = document.getElementById('mobileMenu');
+    const line1 = document.getElementById('line1');
+    const line2 = document.getElementById('line2');
+    const line3 = document.getElementById('line3');
+    menu.classList.toggle('hidden');
+    if (!menu.classList.contains('hidden')) {
+        line1.style.transform = 'rotate(45deg) translate(4px, 4px)';
+        line2.style.opacity = '0';
+        line3.style.transform = 'rotate(-45deg) translate(4px, -4px)';
+    } else {
+        line1.style.transform = 'rotate(0deg)';
+        line2.style.opacity = '1';
+        line3.style.transform = 'rotate(0deg)';
+    }
+}
+
+document.querySelectorAll('#mobileMenu a, #mobileMenu button').forEach(function(item) {
+    item.addEventListener('click', function() {
+        const menu = document.getElementById('mobileMenu');
+        const line1 = document.getElementById('line1');
+        const line2 = document.getElementById('line2');
+        const line3 = document.getElementById('line3');
+        if (!menu.classList.contains('hidden')) {
+            menu.classList.add('hidden');
+            line1.style.transform = 'rotate(0deg)';
+            line2.style.opacity = '1';
+            line3.style.transform = 'rotate(0deg)';
+        }
+    });
+});
+
+// ============================================
+// مدیریت نمایش کاربر
+// ============================================
+function updateUserDisplay() {
+    const userName = localStorage.getItem('userName');
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    const guestMode = document.getElementById('guestMode');
+    const userMode = document.getElementById('userMode');
+    const userNameDisplay = document.getElementById('userNameDisplay');
+    const userInitial = document.getElementById('userInitial');
+    const mobileGuestMode = document.getElementById('mobileGuestMode');
+    const mobileUserMode = document.getElementById('mobileUserMode');
+    const mobileUserNameDisplay = document.getElementById('mobileUserNameDisplay');
+    const mobileUserInitial = document.getElementById('mobileUserInitial');
+    
+    if (isLoggedIn && userName) {
+        if (guestMode) guestMode.classList.add('hidden');
+        if (userMode) userMode.classList.remove('hidden');
+        if (userNameDisplay) userNameDisplay.textContent = userName;
+        if (userInitial) userInitial.textContent = userName.charAt(0);
+        if (mobileGuestMode) mobileGuestMode.classList.add('hidden');
+        if (mobileUserMode) mobileUserMode.classList.remove('hidden');
+        if (mobileUserNameDisplay) mobileUserNameDisplay.textContent = userName;
+        if (mobileUserInitial) mobileUserInitial.textContent = userName.charAt(0);
+    } else {
+        if (guestMode) guestMode.classList.remove('hidden');
+        if (userMode) userMode.classList.add('hidden');
+        if (mobileGuestMode) mobileGuestMode.classList.remove('hidden');
+        if (mobileUserMode) mobileUserMode.classList.add('hidden');
+    }
+}
+
+function logout() {
+    if (confirm('آیا از خروج مطمئن هستید؟')) {
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('userName');
+        localStorage.removeItem('userPhone');
+        localStorage.removeItem('token');
+        updateUserDisplay();
+        window.location.href = 'landingpage.html';
+    }
+}
+
+// ============================================
+// آدرس بک‌اند
+// ============================================
+const API_URL = 'http://localhost:3000/api';
+let allAppointments = [];
+
+// ============================================
+// دریافت نوبت‌ها از بک‌اند
+// ============================================
+async function loadAppointments() {
+    const token = localStorage.getItem('token');
+    const container = document.getElementById('appointmentsList');
+    const emptyMessage = document.getElementById('emptyMessage');
+    
+    if (!token) {
+        container.innerHTML = '';
+        emptyMessage.classList.remove('hidden');
+        return;
+    }
+    
+    try {
+        console.log('📡 دریافت نوبت‌ها...');
+        const response = await fetch(`${API_URL}/appointments`, {
+            headers: { 
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        
+        console.log('📌 Response status:', response.status);
+        
+        if (response.status === 401) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('isLoggedIn');
+            alert('نشست شما منقضی شده است. لطفاً دوباره وارد شوید.');
+            window.location.href = 'login.html';
+            return;
+        }
+        
+        const data = await response.json();
+        console.log('📦 داده:', data);
+        
+        if (data.success && data.appointments) {
+            allAppointments = data.appointments;
+            displayAppointments(allAppointments);
+        } else {
+            container.innerHTML = '';
+            emptyMessage.classList.remove('hidden');
+        }
+    } catch (error) {
+        console.error('❌ خطا در دریافت نوبت‌ها:', error);
+        container.innerHTML = `
+            <div class="text-center py-8 text-red-400">
+                <span class="text-4xl block mb-2">⚠️</span>
+                خطا در دریافت نوبت‌ها
+            </div>
+        `;
+    }
+}
+
+function displayAppointments(appointments) {
+    const container = document.getElementById('appointmentsList');
+    const emptyMessage = document.getElementById('emptyMessage');
+    
+    if (!appointments || appointments.length === 0) {
+        container.innerHTML = '';
+        emptyMessage.classList.remove('hidden');
+        return;
+    }
+    
+    emptyMessage.classList.add('hidden');
+    
+    container.innerHTML = appointments.map((app, index) => {
+        const imageName = app.doctorId?.image?.split('/').pop() || 'default-doctor.jpg';
+        return `
+        <div class="bg-white rounded-2xl border p-6 shadow-sm hover:shadow-md transition">
+            <div class="flex items-start gap-4">
+                <img src="images/${imageName}" alt="${app.doctorId?.name || 'پزشک'}" class="w-16 h-16 rounded-full object-cover border-2 border-blue-100">
+                <div class="flex-1">
+                    <div class="flex flex-wrap justify-between items-start gap-2">
+                        <div>
+                            <h3 class="font-bold text-lg">${app.doctorId?.name || 'پزشک'}</h3>
+                            <p class="text-gray-500 text-sm">${app.doctorId?.specialty || ''}</p>
+                        </div>
+                        <span class="text-xs bg-green-100 text-green-600 px-3 py-1 rounded-full">فعال</span>
+                    </div>
+                    <div class="mt-3 space-y-1 text-sm">
+                        <p class="text-gray-600">📍 ${app.doctorId?.address || ''}</p>
+                        <p class="text-gray-600">📅 تاریخ نوبت: <span class="font-medium">${app.date || 'نامشخص'}</span></p>
+                        <p class="text-gray-600">⏰ ساعت: <span class="font-medium">${app.time || 'نامشخص'}</span></p>
+                        <p class="text-gray-600">🔑 کد پیگیری: <span class="font-medium text-blue-600">${app.trackingCode || '۲۴۶۷۵۸۹۳' + (index + 1)}</span></p>
+                    </div>
+                    <button onclick="cancelAppointment('${app._id || index}')" 
+                            class="mt-4 bg-red-50 text-red-600 px-4 py-2 rounded-xl text-sm font-medium hover:bg-red-100 transition">
+                        ❌ لغو نوبت
+                    </button>
+                </div>
+            </div>
+        </div>
+    `}).join('');
+}
+
+// ============================================
+// لغو نوبت
+// ============================================
+async function cancelAppointment(id) {
+    if (!confirm('آیا از لغو این نوبت مطمئن هستید؟')) return;
+    
+    const token = localStorage.getItem('token');
+    
+    if (!token) {
+        alert('لطفاً وارد حساب کاربری خود شوید.');
+        window.location.href = 'login.html';
+        return;
+    }
+    
+    try {
+        console.log('📡 لغو نوبت:', id);
+        const response = await fetch(`${API_URL}/appointments/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        
+        const data = await response.json();
+        console.log('📌 Response:', data);
+        
+        if (response.status === 401) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('isLoggedIn');
+            alert('نشست شما منقضی شده است. لطفاً دوباره وارد شوید.');
+            window.location.href = 'login.html';
+            return;
+        }
+        
+        if (data.success || data.message) {
+            alert('✅ نوبت با موفقیت لغو شد.');
+            loadAppointments(); // بارگذاری مجدد
+        } else {
+            alert(data.error || 'خطا در لغو نوبت');
+        }
+    } catch (error) {
+        console.error('❌ خطا:', error);
+        alert('خطا در ارتباط با سرور');
+    }
+}
+
+// ============================================
+// اجرا بعد از لود صفحه
+// ============================================
+document.addEventListener('DOMContentLoaded', function() {
+    loadAppointments();
+    updateUserDisplay();
+});
+</script>
+
+</body>
+</html>

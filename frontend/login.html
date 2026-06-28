@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ورود - دکتر رزرو</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+    body{font-family:Vazirmatn,sans-serif}
+</style>
+</head>
+<body class="bg-gray-50 flex items-center justify-center min-h-screen">
+
+<div class="w-full max-w-md px-6">
+    <div class="text-center mb-8">
+        <div class="w-20 h-20 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+            <span class="text-3xl text-white font-bold">د</span>
+        </div>
+        <h1 class="text-2xl font-bold text-gray-800">دکتر رزرو</h1>
+        <p class="text-gray-400 text-sm">سیستم نوبت‌دهی آنلاین</p>
+    </div>
+
+    <div class="bg-white rounded-3xl border p-8 shadow-sm">
+        <h2 class="text-xl font-bold text-gray-800 text-center mb-2">به دکتر رزرو خوش آمدید</h2>
+        <p class="text-gray-500 text-sm text-center mb-6">برای ادامه شماره موبایل خود را وارد نمایید.</p>
+
+        <!-- نمایش خطا -->
+        <div id="errorMessage" class="hidden bg-red-50 text-red-600 p-3 rounded-xl text-sm mb-4"></div>
+        <div id="successMessage" class="hidden bg-green-50 text-green-600 p-3 rounded-xl text-sm mb-4"></div>
+
+        <!-- فرم ورود شماره موبایل -->
+        <form id="loginForm">
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">شماره موبایل</label>
+                <div class="relative">
+                    <span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">+98</span>
+                    <input type="tel" id="phoneInput" 
+                           class="w-full pr-12 pl-4 py-3.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 transition text-gray-700" 
+                           placeholder="۹۱۲۳۴۵۶۷۸۹" 
+                           maxlength="10"
+                           value="9123456789">
+                </div>
+                <p class="text-xs text-gray-400 mt-1">شماره موبایل خود را بدون صفر وارد کنید</p>
+            </div>
+
+            <button type="submit" id="loginBtn"
+                    class="w-full bg-blue-600 text-white py-3.5 rounded-xl font-bold hover:bg-blue-700 transition shadow-md hover:shadow-lg disabled:opacity-50">
+                دریافت کد تایید
+            </button>
+        </form>
+
+        <!-- ✅ بخش QR Code (بدون نمایش کد) -->
+        <div id="qrSection" class="hidden mt-6 text-center">
+            <div class="bg-gray-50 rounded-2xl p-6 border-2 border-dashed border-blue-200">
+                <p class="text-sm text-gray-600 mb-4">📱 کد تایید خود را اسکن کنید</p>
+                <img id="qrCodeImage" src="" alt="QR Code" class="mx-auto w-48 h-48 bg-white p-2 rounded-xl">
+                <p class="text-xs text-gray-400 mt-4">با اسکن این کد، کد تایید را دریافت کنید</p>
+            </div>
+            
+            <div class="mt-4">
+                <p class="text-sm text-gray-600 mb-2">کد تایید را وارد کنید:</p>
+                <div class="flex gap-2">
+                    <input type="text" id="codeInput" 
+                           class="flex-1 px-4 py-3 border rounded-xl text-center text-2xl font-bold tracking-widest focus:outline-none focus:ring-2 focus:ring-blue-400 transition" 
+                           placeholder="------"
+                           maxlength="6"
+                           autofocus>
+                    <button onclick="verifyCode()" 
+                            class="bg-green-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-green-700 transition">
+                        ✅ تایید
+                    </button>
+                </div>
+            </div>
+            
+            <button onclick="resetLogin()" 
+                    class="mt-4 w-full bg-gray-200 text-gray-700 py-3 rounded-xl font-bold hover:bg-gray-300 transition">
+                ↩️ برگشت
+            </button>
+        </div>
+
+        <p class="text-center text-xs text-gray-400 mt-4">
+            با ورود، <a href="#" class="text-blue-600 hover:underline">شرایط و قوانین</a> را می‌پذیرید.
+        </p>
+    </div>
+</div>
+
+<script>
+// ============================================
+// آدرس بک‌اند
+// ============================================
+const API_URL = 'http://localhost:3000/api';
+
+// ============================================
+// تابع ارسال شماره و دریافت QR
+// ============================================
+document.getElementById('loginForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const phone = document.getElementById('phoneInput').value.trim();
+    const btn = document.getElementById('loginBtn');
+    const errorDiv = document.getElementById('errorMessage');
+    const successDiv = document.getElementById('successMessage');
+
+    errorDiv.classList.add('hidden');
+    successDiv.classList.add('hidden');
+    errorDiv.textContent = '';
+    successDiv.textContent = '';
+
+    if (phone.length !== 10) {
+        errorDiv.textContent = 'لطفاً شماره موبایل ۱۰ رقمی را وارد کنید.';
+        errorDiv.classList.remove('hidden');
+        return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'در حال دریافت...';
+
+    try {
+        const fullPhone = `0${phone}`;
+        console.log('📡 ارسال به:', `${API_URL}/auth/login-qr`);
+        console.log('📱 شماره:', fullPhone);
+
+        const response = await fetch(`${API_URL}/auth/login-qr`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone: fullPhone })
+        });
+
+        if (!response.ok) {
+            throw new Error(`خطای ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log('📦 داده:', data);
+
+        if (data.success) {
+            // ✅ نمایش QR Code
+            document.getElementById('qrCodeImage').src = data.data.qrCode;
+            
+            // ذخیره اطلاعات
+            localStorage.setItem('userPhone', fullPhone);
+            localStorage.setItem('qrCode', data.data.qrCode);
+            localStorage.setItem('userId', data.data.userId);
+            
+            // مخفی کردن فرم و نمایش QR
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('qrSection').classList.remove('hidden');
+            document.getElementById('codeInput').focus();
+            
+            successDiv.textContent = '✅ QR Code دریافت شد. لطفاً کد تایید را وارد کنید.';
+            successDiv.className = 'bg-green-50 text-green-600 p-3 rounded-xl text-sm mb-4';
+            successDiv.classList.remove('hidden');
+        } else {
+            errorDiv.textContent = data.message || 'خطا در دریافت کد تایید';
+            errorDiv.classList.remove('hidden');
+        }
+    } catch (error) {
+        console.error('❌ خطا:', error);
+        errorDiv.textContent = `❌ خطا در ارتباط با سرور: ${error.message}`;
+        errorDiv.classList.remove('hidden');
+    } finally {
+        btn.disabled = false;
+        btn.textContent = 'دریافت کد تایید';
+    }
+});
+
+// ============================================
+// تایید کد
+// ============================================
+async function verifyCode() {
+    const code = document.getElementById('codeInput').value.trim();
+    const errorDiv = document.getElementById('errorMessage');
+    
+    errorDiv.classList.add('hidden');
+    errorDiv.textContent = '';
+
+    if (code.length !== 6) {
+        errorDiv.textContent = 'لطفاً کد ۶ رقمی را وارد کنید.';
+        errorDiv.classList.remove('hidden');
+        return;
+    }
+
+    const phone = localStorage.getItem('userPhone');
+    
+    if (!phone) {
+        errorDiv.textContent = 'لطفاً ابتدا شماره موبایل را وارد کنید.';
+        errorDiv.classList.remove('hidden');
+        return;
+    }
+
+    try {
+        console.log('📡 تایید کد:', code);
+        
+        const response = await fetch(`${API_URL}/auth/verify`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone, code })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            localStorage.setItem('token', data.data.token);
+            localStorage.setItem('userName', data.data.user.name);
+            localStorage.setItem('isLoggedIn', 'true');
+            window.location.href = 'landingpage.html';
+        } else {
+            errorDiv.textContent = data.message || 'کد نامعتبر است';
+            errorDiv.classList.remove('hidden');
+        }
+    } catch (error) {
+        console.error('❌ خطا:', error);
+        errorDiv.textContent = '❌ خطا در تایید کد';
+        errorDiv.classList.remove('hidden');
+    }
+}
+
+// ============================================
+// برگشت به فرم ورود
+// ============================================
+function resetLogin() {
+    document.getElementById('loginForm').style.display = 'block';
+    document.getElementById('qrSection').classList.add('hidden');
+    document.getElementById('errorMessage').classList.add('hidden');
+    document.getElementById('successMessage').classList.add('hidden');
+    document.getElementById('phoneInput').value = '';
+    document.getElementById('phoneInput').focus();
+    document.getElementById('codeInput').value = '';
+}
+
+// ============================================
+// Enter key برای ورود کد
+// ============================================
+document.getElementById('codeInput').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        verifyCode();
+    }
+});
+</script>
+
+</body>
+</html>
